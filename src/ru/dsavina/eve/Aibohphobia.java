@@ -20,10 +20,5 @@ public class Aibohphobia {
             System.out.print(phrase.charAt(i));
 
         }
-
-        System.out.println();
-
-        System.out.print("> ");
-
     }
 }
