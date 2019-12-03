@@ -1,0 +1,2 @@
+public class Limak {
+}
