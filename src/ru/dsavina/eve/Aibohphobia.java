@@ -42,7 +42,6 @@ public class Aibohphobia {
             } else {
                 System.out.println(" -- это не палиндром.");
             }
-
         }
     }
 }
