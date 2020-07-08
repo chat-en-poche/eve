@@ -3,63 +3,99 @@ package ru.dsavina.eve;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Katzenjamer {
 
     public static void main(String[] args) throws IOException {
+        final String alphabet = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя";
 
-        InputStreamReader isr = new InputStreamReader(System.in);
-        BufferedReader br = new BufferedReader(isr);
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        System.out.println();
-        System.out.print("Введи слово > ");
+        String word = null;
+        boolean isItWord = false;
 
-        String word = br.readLine().toLowerCase();
-
-        int count = 0;
-
-        ArrayList list = new ArrayList();
-
-        String alphabet = "абвгдеёжзиклмнопрстуфхцчшщъыьэюя";
-
-        while (true) {
-
+        while (!isItWord) {
             System.out.println();
-            System.out.print("Введи слово, составленное из букв вот того слова сверху > ");
+            System.out.print("Введите слово > ");
 
-            String newWord = br.readLine().toLowerCase();
+            word = br.readLine();
+            if (word == null) {
+                break;
+            }
 
-            int[] letters = new int[alphabet.length()];
+            if (word.length() < 2) {
+                System.out.println("Слово должно состоять минимум из двух букв.");
+            } else {
+                word = word.toLowerCase();
 
-            for (int i = 0; i < word.length(); i++) {
-                letters[alphabet.indexOf(word.charAt(i))]++;
+                isItWord = true;
+                for (int i = 0; i < word.length(); i++) {
+                    if (alphabet.indexOf(word.charAt(i)) == -1) {
+                        isItWord = false;
+                        System.out.println("Слово должно содержать только русские буквы.");
+                        break;
+                    }
+                }
+            }
+        }
+
+        List<String> thesaurus = new ArrayList<>();
+
+        while (isItWord) {
+            System.out.println();
+            System.out.print("Введите слово, составленное из букв первого слова > ");
+
+            String newWord = br.readLine();
+            if (newWord == null) {
+                break;
+            }
+
+            newWord = newWord.toLowerCase();
+
+            if (newWord.equals("стоп")) {
+                break;
             }
 
             boolean highFive = true;
 
             if (newWord.equals(word)) {
-                System.out.println("Наебать меня пытаешься?");
-            }
+                System.out.println("Слова должны отличаться.");
+                highFive = false;
+            } else if (newWord.length() < 2) {
+                System.out.println("Слово должно состоять минимум из двух букв.");
+                highFive = false;
+            } else {
+                int[] letters = new int[alphabet.length()];
 
-            for (int i = 0; i < newWord.length(); i++) {
-                if (letters[alphabet.indexOf(newWord.charAt(i))] == 0) {
-                    System.out.println("Идиот");
-                    highFive = false;
-                    break;
-                } else {
-                    letters[alphabet.indexOf(newWord.charAt(i))]--;
+                for (int i = 0; i < word.length(); i++) {
+                    letters[alphabet.indexOf(word.charAt(i))]++;
+                }
+
+                for (int i = 0; i < newWord.length(); i++) {
+                    if (alphabet.indexOf(newWord.charAt(i)) == -1) {
+                        System.out.println("Слово должно содержать только русские буквы.");
+                        highFive = false;
+                        break;
+                    } else if (letters[alphabet.indexOf(newWord.charAt(i))] == 0) {
+                        System.out.println("Неверно.");
+                        highFive = false;
+                        break;
+                    } else {
+                        letters[alphabet.indexOf(newWord.charAt(i))]--;
+                    }
                 }
             }
 
             if (highFive) {
-                if (list.indexOf(newWord) == -1) {
-                    list.add(newWord);
-                    count++;
-                    System.out.println("Молодец, ты собрал слов: " + count);
+                if (!thesaurus.contains(newWord)) {
+                    thesaurus.add(newWord);
+                    System.out.println("Вы собрали слов: " + thesaurus.size());
                 } else {
-                    System.out.println("Наебать меня пытаешься?");
+                    System.out.println("Вы уже вводили это слово.");
                 }
             }
         }
